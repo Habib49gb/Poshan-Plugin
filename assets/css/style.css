@@ -1,0 +1,323 @@
+/* Main Wrapper */
+.poshan-calculator-wrapper,
+.poshan-calculator-wrapper * {
+    box-sizing: border-box;
+}
+
+.poshan-calculator-wrapper {
+    font-family: 'Inter', 'Segoe UI', sans-serif;
+    max-width: 400px;
+    margin: 20px auto;
+    background: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    border: 2px solid red;
+}
+
+.pc-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Labels */
+.pc-label {
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #000;
+    margin-bottom: 10px;
+    display: block;
+}
+
+/* Gender Selection */
+.pc-gender-selection {
+    display: flex;
+    justify-content: center;
+    gap: 60px;
+    /* Increased gap */
+    margin-bottom: 10px;
+}
+
+.pc-gender-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: all 0.2s ease;
+    border: none;
+    padding: 0;
+}
+
+.pc-gender-option:hover {
+    opacity: 1;
+}
+
+.pc-gender-option.selected {
+    opacity: 1;
+}
+
+.pc-gender-icon {
+    width: 80px;
+    /* Larger icons */
+    height: 80px;
+    border-radius: 50%;
+    /* background: #f5f5f5; Removed background, let SVG handle it */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+    overflow: hidden;
+    border: 3px solid transparent;
+    /* Reserve border on icon */
+    transition: border-color 0.3s ease;
+}
+
+.pc-gender-option.selected .pc-gender-icon {
+    border-color: #e67e22;
+    /* Orange ring */
+    background-color: transparent;
+}
+
+.pc-gender-icon img {
+    width: 80%;
+    height: auto;
+}
+
+.pc-gender-option span {
+    font-size: 16px;
+    font-weight: 600;
+    color: #555;
+}
+
+.pc-gender-option.selected span {
+    color: #000;
+}
+
+/* Inputs */
+.pc-input-wrapper {
+    position: relative;
+}
+
+.pc-input {
+    width: 100%;
+    padding: 15px;
+    /* More padding */
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    /* Softer corners */
+    font-size: 16px;
+    color: #333;
+    outline: none;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.02);
+}
+
+.pc-input:focus {
+    border-color: #103326;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* Sliders & Numbers */
+.pc-slider-container {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.pc-slider {
+    flex-grow: 1;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 8px;
+    /* Thicker track */
+    background: #e0e0e0;
+    border-radius: 10px;
+    outline: none;
+    cursor: pointer;
+}
+
+.pc-number-input {
+    width: 90px;
+    padding: 12px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 18px;
+    /* Larger text */
+    font-weight: 500;
+    color: #333;
+    -moz-appearance: textfield;
+    appearance: textfield;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.02);
+}
+
+.pc-number-input:focus {
+    border-color: #103326;
+}
+
+.pc-summary-row {
+    margin-bottom: 1px;
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+.pc-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 24px;
+    /* Larger thumb */
+    height: 24px;
+    border-radius: 50%;
+    background: #f39c12;
+    /* Matches image orange */
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    border: 3px solid #fff;
+    /* White border for 'ring' effect */
+}
+
+.pc-slider::-moz-range-thumb {
+    border-radius: 6px;
+    text-align: center;
+    font-size: 16px;
+    color: #333;
+    -moz-appearance: textfield;
+}
+
+.pc-number-input::-webkit-outer-spin-button,
+.pc-number-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Submit Button */
+.pc-submit-btn {
+    width: 100%;
+    background-color: #103326;
+    /* Dark Green */
+    color: white;
+    font-size: 16px;
+    padding: 15px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+    text-align: center;
+}
+
+.pc-submit-btn:hover {
+    background-color: #0b251b;
+}
+
+/* Results */
+.pc-result-container {
+    display: none;
+    /* Hidden by default */
+}
+
+.pc-result-summary {
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.pc-summary-row {
+    margin-bottom: 1px;
+    font-size: 16px;
+    line-height: l.6;
+}
+
+.pc-summary-label {
+    font-weight: 700;
+    color: #000;
+}
+
+.pc-results-heading {
+    font-size: 18px;
+    font-weight: 800;
+    margin-bottom: 15px;
+    color: #000;
+}
+
+.pc-result-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    margin-bottom: 25px;
+}
+
+.pc-result-item {
+    font-size: 18px;
+    margin-bottom: 10px;
+    color: #000;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 700;
+    /* Bold text for labels */
+}
+
+.pc-status-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 500;
+    background-color: #27ae60;
+    /* Default green */
+}
+
+.pc-status-badge.normal {
+    background-color: #5cb85c;
+}
+
+.pc-status-badge.warning {
+    background-color: #f0ad4e;
+}
+
+.pc-status-badge.danger {
+    background-color: #d9534f;
+}
+
+.pc-btn-container {
+    display: flex;
+    gap: 15px;
+}
+
+.pc-back-btn,
+.pc-clear-btn {
+    flex: 1;
+    padding: 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    text-align: center;
+    font-size: 16px;
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.pc-back-btn {
+    background-color: #103326;
+    color: white;
+}
+
+.pc-back-btn:hover {
+    background-color: #0b251b;
+}
+
+.pc-clear-btn {
+    background-color: transparent;
+    border: 2px solid #103326;
+    color: #103326;
+}
+
+.pc-clear-btn:hover {
+    background-color: #103326;
+    color: white;
+}
