@@ -287,11 +287,13 @@
 
 .pc-btn-container {
     display: flex;
+    flex-wrap: wrap;
     gap: 15px;
 }
 
 .pc-back-btn,
-.pc-clear-btn {
+.pc-clear-btn,
+.pc-pdf-btn {
     flex: 1;
     padding: 15px;
     border-radius: 8px;
@@ -321,4 +323,13 @@
 .pc-clear-btn:hover {
     background-color: #103326;
     color: white;
+}
+
+.pc-pdf-btn {
+    background-color: #e67e22;
+    color: white;
+}
+
+.pc-pdf-btn:hover {
+    background-color: #d35400;
 }

@@ -25,7 +25,8 @@ class Poshan_Calculator {
         global $post;
         if ( is_a( $post, 'WP_Post' ) && has_shortcode( $post->post_content, 'poshan_calculator' ) ) {
             wp_enqueue_style( 'poshan-calculator-style', plugin_dir_url( __FILE__ ) . 'assets/css/style.css', array(), '1.0.0' );
-            wp_enqueue_script( 'poshan-calculator-script', plugin_dir_url( __FILE__ ) . 'assets/js/script.js', array( 'jquery' ), '1.0.0', true );
+            wp_enqueue_script( 'html2pdf', 'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js', array(), '0.10.1', true );
+            wp_enqueue_script( 'poshan-calculator-script', plugin_dir_url( __FILE__ ) . 'assets/js/script.js', array( 'jquery', 'html2pdf' ), '1.0.0', true );
         }
     }
 

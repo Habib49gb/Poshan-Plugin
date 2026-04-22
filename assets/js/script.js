@@ -130,7 +130,8 @@ jQuery(document).ready(function ($) {
         // Buttons Container
         html += '<div class="pc-btn-container">';
         html += '<button id="pc-back-btn" class="pc-back-btn">&larr; Back</button>';
-        html += '<button id="pc-clear-btn" class="pc-clear-btn">Clear & New &rarr;</button>';
+        html += '<button id="pc-clear-btn" class="pc-clear-btn">Clear & New</button>';
+        html += '<button id="pc-pdf-btn" class="pc-pdf-btn">Download PDF</button>';
         html += '</div>';
 
         $('#pc-result-text').html(html);
@@ -164,5 +165,26 @@ jQuery(document).ready(function ($) {
         $('#pc-result-container').hide();
         $('.pc-form-group').fadeIn();
         $('#pc-submit-btn').fadeIn();
+    });
+
+    // Handle PDF Download
+    $(document).on('click', '#pc-pdf-btn', function () {
+        var element = document.getElementById('pc-result-container');
+        
+        // Hide buttons before generating PDF
+        $('.pc-btn-container').hide();
+
+        var opt = {
+            margin:       10,
+            filename:     'poshan-result.pdf',
+            image:        { type: 'jpeg', quality: 0.98 },
+            html2canvas:  { scale: 2 },
+            jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        };
+
+        html2pdf().set(opt).from(element).save().then(function() {
+            // Restore buttons
+            $('.pc-btn-container').show();
+        });
     });
 });
