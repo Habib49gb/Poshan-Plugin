@@ -81,13 +81,16 @@ class Poshan_Calculator {
                     </div>
                 </div>
 
+                <!-- Error Message -->
+                <div id="pc-error-message" style="color: #d9534f; display: none; margin-bottom: 15px; font-weight: 600; text-align: center; font-size: 14px;"></div>
+
                 <!-- Submit Button -->
                 <button id="pc-submit-btn" class="pc-submit-btn">Show Results &rarr;</button>
 
                 <!-- Results Display (Hidden by default) -->
                 <div id="pc-result-container" class="pc-result-container" style="display:none;">
                     <h3>Result</h3>
-                    <p id="pc-result-text"></p>
+                    <div id="pc-result-text"></div>
                     <div class="pc-charts">
                         <!-- Placeholders for charts/graphs if needed -->
                     </div>

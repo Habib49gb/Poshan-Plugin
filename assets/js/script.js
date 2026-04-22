@@ -44,8 +44,10 @@ jQuery(document).ready(function ($) {
         var heightCm = parseFloat($('#pc-height-input').val());
         var weightKg = parseFloat($('#pc-weight-input').val());
 
+        $('#pc-error-message').hide();
+
         if (!dob) {
-            alert('Please select a Date of Birth.');
+            $('#pc-error-message').text('Please select a Date of Birth.').fadeIn();
             return;
         }
 
@@ -57,6 +59,17 @@ jQuery(document).ready(function ($) {
         if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
             ageYears--;
         }
+
+        if (ageYears > 18) {
+            $('#pc-error-message').text('Please enter an age of 18 years or less.').fadeIn();
+            return;
+        }
+
+        if (ageYears < 0) {
+            $('#pc-error-message').text('Date of birth cannot be in the future.').fadeIn();
+            return;
+        }
+
         var ageMonths = (ageYears * 12) + m;
         if (today.getDate() < birthDate.getDate()) {
             ageMonths--; // Adjust for partial month
@@ -170,21 +183,28 @@ jQuery(document).ready(function ($) {
     // Handle PDF Download
     $(document).on('click', '#pc-pdf-btn', function () {
         var element = document.getElementById('pc-result-container');
-        
+
         // Hide buttons before generating PDF
         $('.pc-btn-container').hide();
+        var originalScroll = window.scrollY || document.documentElement.scrollTop;
+        window.scrollTo(0, 0);
 
         var opt = {
-            margin:       10,
-            filename:     'poshan-result.pdf',
-            image:        { type: 'jpeg', quality: 0.98 },
-            html2canvas:  { scale: 2 },
-            jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            margin: 10,
+            filename: 'poshan-result.pdf',
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2, backgroundColor: '#ffffff', useCORS: true, scrollY: 0 },
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
         };
 
-        html2pdf().set(opt).from(element).save().then(function() {
+        html2pdf().set(opt).from(element).save().then(function () {
             // Restore buttons
             $('.pc-btn-container').show();
+            window.scrollTo(0, originalScroll);
+        }).catch(function (err) {
+            console.error("PDF generation error: ", err);
+            $('.pc-btn-container').show();
+            window.scrollTo(0, originalScroll);
         });
     });
 });
