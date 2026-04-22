@@ -40,24 +40,13 @@ class Poshan_Calculator {
                     <div class="pc-gender-selection">
                         <div class="pc-gender-option selected" data-value="girl">
                             <div class="pc-gender-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="100%" height="100%">
-                                    <circle cx="32" cy="32" r="30" fill="#f5f5f5"/>
-                                    <path d="M32 48c-8 0-14 4-14 9h28c0-5-6-9-14-9z" fill="#ffab40"/>
-                                    <circle cx="32" cy="30" r="10" fill="#ffccbc"/>
-                                    <path d="M32 12c-6 0-11 4-11 11v6c0 4 3 8 6 9h10c3-1 6-5 6-9v-6c0-7-5-11-11-11z" fill="#37474f"/>
-                                    <path d="M21 23c0 8 4 14 11 14s11-6 11-14H21z" fill="#37474f"/> 
-                                </svg>
+                                <img src="<?php echo esc_url( plugin_dir_url( __FILE__ ) . 'assets/images/girl.png' ); ?>" alt="Girl">
                             </div>
                             <span>Girl</span>
                         </div>
                         <div class="pc-gender-option" data-value="boy">
                             <div class="pc-gender-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="100%" height="100%">
-                                    <circle cx="32" cy="32" r="30" fill="#f5f5f5"/>
-                                    <path d="M32 48c-8 0-14 4-14 9h28c0-5-6-9-14-9z" fill="#ff5252"/>
-                                    <circle cx="32" cy="30" r="10" fill="#ffccbc"/>
-                                    <path d="M32 14c-5 0-9 3-9 8v2c0 1 .5 2 1 2h16c.5 0 1-1 1-2v-2c0-5-4-8-9-8z" fill="#37474f"/>
-                                </svg>
+                                <img src="<?php echo esc_url( plugin_dir_url( __FILE__ ) . 'assets/images/boy.png' ); ?>" alt="Boy">
                             </div>
                             <span>Boy</span>
                         </div>
