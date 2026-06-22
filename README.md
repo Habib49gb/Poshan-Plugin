@@ -88,7 +88,11 @@ Poshan Plugin/
 ```
 
 ---
+## 🔗 Resources
 
+- Website: https://babyposhancalculator.com/
+- Online Poshan Calculator: https://babyposhancalculator.com/
+  
 ## 📄 License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
