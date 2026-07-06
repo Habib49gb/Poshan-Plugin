@@ -1,42 +1,102 @@
 jQuery(document).ready(function ($) {
 
-    // Gender Selection
+    // Helper function to escape HTML to prevent XSS
+    function escapeHtml(string) {
+        return String(string).replace(/[&<>"'`=\/]/g, function (s) {
+            return {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#39;',
+                '/': '&#x2F;',
+                '=': '&#x3D;'
+            }[s];
+        });
+    }
+
+    // Keyboard support for gender selection (Space and Enter keys)
+    $('.pc-gender-option').on('keydown', function (e) {
+        if (e.key === ' ' || e.key === 'Enter') {
+            e.preventDefault();
+            $(this).click();
+        }
+    });
+
+    // Gender Selection Click
     $('.pc-gender-option').on('click', function () {
-        $('.pc-gender-option').removeClass('selected');
-        $(this).addClass('selected');
+        $('.pc-gender-option').removeClass('selected').attr('aria-checked', 'false');
+        $(this).addClass('selected').attr('aria-checked', 'true');
         var gender = $(this).data('value');
         $('#pc-gender').val(gender);
-        // You could update images here if needed to show "active" state
     });
 
     // Height Slider <-> Input Sync
     $('#pc-height-slider').on('input', function () {
-        $('#pc-height-input').val($(this).val());
+        var val = $(this).val();
+        $('#pc-height-input').val(val);
+        $(this).attr('aria-valuenow', val);
     });
 
+    // Height Number input - update slider during typing without interrupting focus
     $('#pc-height-input').on('input', function () {
-        var val = $(this).val();
-        // Validation for min/max
-        if (val < 30) val = 30;
-        if (val > 200) val = 200;
-        $('#pc-height-slider').val(val);
+        var val = parseFloat($(this).val());
+        if (!isNaN(val)) {
+            var sliderVal = val;
+            if (sliderVal < 30) sliderVal = 30;
+            if (sliderVal > 200) sliderVal = 200;
+            $('#pc-height-slider').val(sliderVal).attr('aria-valuenow', sliderVal);
+        }
+    });
+
+    // Height Number input - clamp value when user finishes typing
+    $('#pc-height-input').on('change blur', function () {
+        var val = parseFloat($(this).val());
+        if (isNaN(val) || val < 30) {
+            $(this).val('30.0');
+            $('#pc-height-slider').val(30).attr('aria-valuenow', 30);
+        } else if (val > 200) {
+            $(this).val('200.0');
+            $('#pc-height-slider').val(200).attr('aria-valuenow', 200);
+        } else {
+            $(this).val(val.toFixed(1));
+        }
     });
 
     // Weight Slider <-> Input Sync
     $('#pc-weight-slider').on('input', function () {
-        $('#pc-weight-input').val($(this).val());
-    });
-
-    $('#pc-weight-input').on('input', function () {
         var val = $(this).val();
-        // Validation for min/max
-        if (val < 2) val = 2;
-        if (val > 150) val = 150;
-        $('#pc-weight-slider').val(val);
+        $('#pc-weight-input').val(val);
+        $(this).attr('aria-valuenow', val);
     });
 
-    // Calculate Results
-    $('#pc-submit-btn').on('click', function (e) {
+    // Weight Number input - update slider during typing without interrupting focus
+    $('#pc-weight-input').on('input', function () {
+        var val = parseFloat($(this).val());
+        if (!isNaN(val)) {
+            var sliderVal = val;
+            if (sliderVal < 2) sliderVal = 2;
+            if (sliderVal > 150) sliderVal = 150;
+            $('#pc-weight-slider').val(sliderVal).attr('aria-valuenow', sliderVal);
+        }
+    });
+
+    // Weight Number input - clamp value when user finishes typing
+    $('#pc-weight-input').on('change blur', function () {
+        var val = parseFloat($(this).val());
+        if (isNaN(val) || val < 2) {
+            $(this).val('2.0');
+            $('#pc-weight-slider').val(2).attr('aria-valuenow', 2);
+        } else if (val > 150) {
+            $(this).val('150.0');
+            $('#pc-weight-slider').val(150).attr('aria-valuenow', 150);
+        } else {
+            $(this).val(val.toFixed(1));
+        }
+    });
+
+    // Calculate Results - Bind to form submit to handle Enter key submissions as well
+    $('#poshan-calculator-form').on('submit', function (e) {
         e.preventDefault();
 
         var gender = $('#pc-gender').val();
@@ -47,12 +107,29 @@ jQuery(document).ready(function ($) {
         $('#pc-error-message').hide();
 
         if (!dob) {
-            $('#pc-error-message').text('Please select a Date of Birth.').fadeIn();
+            $('#pc-error-message').text('Please select a Date of Birth.').fadeIn().focus();
+            return;
+        }
+
+        // Validate DOB format / check if valid date
+        var birthDate = new Date(dob);
+        if (isNaN(birthDate.getTime())) {
+            $('#pc-error-message').text('Please enter a valid Date of Birth.').fadeIn().focus();
+            return;
+        }
+
+        // Validate range bounds
+        if (isNaN(heightCm) || heightCm < 30 || heightCm > 200) {
+            $('#pc-error-message').text('Please enter a height between 30 and 200 cm.').fadeIn().focus();
+            return;
+        }
+
+        if (isNaN(weightKg) || weightKg < 2 || weightKg > 150) {
+            $('#pc-error-message').text('Please enter a weight between 2 and 150 kg.').fadeIn().focus();
             return;
         }
 
         // Parse Age in Months
-        var birthDate = new Date(dob);
         var today = new Date();
         var ageYears = today.getFullYear() - birthDate.getFullYear();
         var m = today.getMonth() - birthDate.getMonth();
@@ -61,12 +138,12 @@ jQuery(document).ready(function ($) {
         }
 
         if (ageYears > 18) {
-            $('#pc-error-message').text('Please enter an age of 18 years or less.').fadeIn();
+            $('#pc-error-message').text('Please enter an age of 18 years or less.').fadeIn().focus();
             return;
         }
 
         if (ageYears < 0) {
-            $('#pc-error-message').text('Date of birth cannot be in the future.').fadeIn();
+            $('#pc-error-message').text('Date of birth cannot be in the future.').fadeIn().focus();
             return;
         }
 
@@ -88,18 +165,13 @@ jQuery(document).ready(function ($) {
         bmi = bmi.toFixed(2);
 
         // 2. Stunting (Height-for-Age)
-        // Placeholder logic: Just for demo purposes since we lack the Z-score tables.
-        // In a real app, you'd lookup WHO tables here.
         var stuntingStatus = 'Normal';
-        // Example logic: if height is very low for age (mock check)
-        // (This is NOT medically accurate without tables, just for UI demo)
         if (ageMonths > 12 && heightCm < (70 + (ageMonths * 0.5)) * 0.85) {
             stuntingStatus = 'Severely Stunted';
         }
 
         // 3. Underweight (Weight-for-Age)
         var underweightStatus = 'Normal';
-        // Mock check
         if (ageMonths > 12 && weightKg < (8 + (ageMonths * 0.2)) * 0.7) {
             underweightStatus = 'Underweight';
         }
@@ -115,16 +187,16 @@ jQuery(document).ready(function ($) {
             if (status.includes('Severe') || status.includes('Severely')) cls = 'danger';
             else if (status.includes('Underweight') || status.includes('Wasting') || status.includes('Stunted')) cls = 'warning';
 
-            return '<span class="pc-status-badge ' + cls + '">' + status + '</span>';
+            return '<span class="pc-status-badge ' + cls + '">' + escapeHtml(status) + '</span>';
         }
 
-        // Build HTML
+        // Build HTML securely
         var html = '';
 
         // Summary Box
         html += '<div class="pc-result-summary">';
-        html += '<div class="pc-summary-row"><span class="pc-summary-label">Gender: </span>' + (gender.charAt(0).toUpperCase() + gender.slice(1)) + '</div>';
-        html += '<div class="pc-summary-row"><span class="pc-summary-label">Date of Birth: </span>' + dob + '</div>';
+        html += '<div class="pc-summary-row"><span class="pc-summary-label">Gender: </span>' + escapeHtml(gender.charAt(0).toUpperCase() + gender.slice(1)) + '</div>';
+        html += '<div class="pc-summary-row"><span class="pc-summary-label">Date of Birth: </span>' + escapeHtml(dob) + '</div>';
         html += '<br>';
         html += '<div class="pc-summary-row"><span class="pc-summary-label">Height: </span>' + heightCm + ' cm</div>';
         html += '<div class="pc-summary-row"><span class="pc-summary-label">Weight: </span>' + weightKg + ' kg</div>';
@@ -142,9 +214,9 @@ jQuery(document).ready(function ($) {
 
         // Buttons Container
         html += '<div class="pc-btn-container">';
-        html += '<button id="pc-back-btn" class="pc-back-btn">&larr; Back</button>';
-        html += '<button id="pc-clear-btn" class="pc-clear-btn">Clear & New</button>';
-        html += '<button id="pc-pdf-btn" class="pc-pdf-btn">Download PDF</button>';
+        html += '<button type="button" id="pc-back-btn" class="pc-back-btn">&larr; Back</button>';
+        html += '<button type="button" id="pc-clear-btn" class="pc-clear-btn">Clear & New</button>';
+        html += '<button type="button" id="pc-pdf-btn" class="pc-pdf-btn">Download PDF</button>';
         html += '</div>';
 
         $('#pc-result-text').html(html);
@@ -152,14 +224,20 @@ jQuery(document).ready(function ($) {
         // Show/Hide
         $('.pc-form-group').hide(); // Hide form elements
         $('#pc-submit-btn').hide(); // Hide submit button
-        $('#pc-result-container').fadeIn();
+        $('#pc-result-container').fadeIn(function() {
+            // Shift keyboard focus to the results container for screen readers
+            $(this).attr('tabindex', '-1').focus();
+        });
     });
 
     // Handle Back Button (Delegated for dynamic content)
     $(document).on('click', '#pc-back-btn', function () {
         $('#pc-result-container').hide();
         $('.pc-form-group').fadeIn();
-        $('#pc-submit-btn').fadeIn();
+        $('#pc-submit-btn').fadeIn(function() {
+            // Restore focus back to the selected gender
+            $('.pc-gender-option.selected').focus();
+        });
     });
 
     // Handle Clear Button (Delegated for dynamic content)
@@ -168,16 +246,21 @@ jQuery(document).ready(function ($) {
         $('#pc-dob').val('');
         $('#pc-height-slider').val(60).trigger('input');
         $('#pc-weight-slider').val(10).trigger('input');
+        $('#pc-height-input').val('60.0');
+        $('#pc-weight-input').val('10.0');
 
         // Reset Gender to Girl
-        $('.pc-gender-option').removeClass('selected');
-        $('.pc-gender-option[data-value="girl"]').addClass('selected');
+        $('.pc-gender-option').removeClass('selected').attr('aria-checked', 'false');
+        $('.pc-gender-option[data-value="girl"]').addClass('selected').attr('aria-checked', 'true');
         $('#pc-gender').val('girl');
 
         // Show Form
         $('#pc-result-container').hide();
         $('.pc-form-group').fadeIn();
-        $('#pc-submit-btn').fadeIn();
+        $('#pc-submit-btn').fadeIn(function() {
+            // Reset focus to gender options
+            $('.pc-gender-option.selected').focus();
+        });
     });
 
     // Handle PDF Download
@@ -201,10 +284,14 @@ jQuery(document).ready(function ($) {
             // Restore buttons
             $('.pc-btn-container').show();
             window.scrollTo(0, originalScroll);
+            // Restore focus back to download PDF button
+            $('#pc-pdf-btn').focus();
         }).catch(function (err) {
             console.error("PDF generation error: ", err);
             $('.pc-btn-container').show();
             window.scrollTo(0, originalScroll);
+            $('#pc-pdf-btn').focus();
         });
     });
 });
+

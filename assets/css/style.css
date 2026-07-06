@@ -179,11 +179,13 @@
 }
 
 .pc-slider::-moz-range-thumb {
-    border-radius: 6px;
-    text-align: center;
-    font-size: 16px;
-    color: #333;
-    -moz-appearance: textfield;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #f39c12;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    border: 3px solid #fff;
 }
 
 .pc-number-input::-webkit-outer-spin-button,
@@ -226,11 +228,7 @@
     color: #333;
 }
 
-.pc-summary-row {
-    margin-bottom: 1px;
-    font-size: 16px;
-    line-height: l.6;
-}
+/* pc-summary-row styles inherited from line 161 */
 
 .pc-summary-label {
     font-weight: 700;
@@ -275,14 +273,17 @@
 
 .pc-status-badge.normal {
     background-color: #5cb85c;
+    color: #103326;
 }
 
 .pc-status-badge.warning {
     background-color: #f0ad4e;
+    color: #103326;
 }
 
 .pc-status-badge.danger {
-    background-color: #d9534f;
+    background-color: #c9302c;
+    color: #ffffff;
 }
 
 .pc-btn-container {
@@ -332,4 +333,31 @@
 
 .pc-pdf-btn:hover {
     background-color: #d35400;
+}
+
+/* Visually hidden screen reader utility class */
+.screen-reader-text {
+    border: 0;
+    clip: rect(1px, 1px, 1px, 1px);
+    clip-path: inset(50%);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+    word-wrap: normal !important;
+}
+
+/* Keyboard accessibility focus outlines */
+.pc-submit-btn:focus-visible,
+.pc-back-btn:focus-visible,
+.pc-clear-btn:focus-visible,
+.pc-pdf-btn:focus-visible,
+.pc-gender-option:focus-visible,
+.pc-input:focus-visible,
+.pc-number-input:focus-visible,
+.pc-slider:focus-visible {
+    outline: 3px solid #f39c12;
+    outline-offset: 2px;
 }
